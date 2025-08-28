@@ -38,6 +38,11 @@ namespace ContosoUniversity.Controllers
             return View();
         }
 
+        public ActionResult StatusErrorCode(int code)
+        {
+            return View("StatusErrorCode", code);
+        }
+
         public ActionResult Unauthorized()
         {
             ViewBag.Message = "You don't have permission to access this resource.";

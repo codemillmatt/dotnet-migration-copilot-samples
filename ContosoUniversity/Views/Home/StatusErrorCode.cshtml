@@ -1,0 +1,28 @@
+@model int
+@{
+    ViewData["Title"] = "Status Error Code";
+    var code = Model.ToString();
+}
+
+<h1 class="text-danger">Oops! Something went wrong.</h1>
+
+@if (code == "404")
+{
+    <p class="text-muted">The page you are looking for could not be found.</p>
+}
+else if (code == "403")
+{
+    <p class="text-muted">You do not have permission to access this resource.</p>
+}
+else if (code == "500")
+{
+    <p class="text-muted">An internal server error occurred. Please try again later.</p>
+}
+else
+{
+    <p class="text-muted">An unexpected error occurred (Status code: @code).</p>
+}
+
+<p>
+    @Html.ActionLink("Go back to Home", "Index", "Home", null, new { @class = "btn btn-primary" })
+</p>

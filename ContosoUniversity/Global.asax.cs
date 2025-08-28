@@ -11,7 +11,6 @@ namespace ContosoUniversity
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             
             // Initialize database with EF Core
             InitializeDatabase();
