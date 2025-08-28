@@ -12,7 +12,6 @@ namespace ContosoUniversity
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
             
             // Initialize database with EF Core
             InitializeDatabase();
