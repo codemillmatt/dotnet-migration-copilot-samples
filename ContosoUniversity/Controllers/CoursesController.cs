@@ -9,11 +9,18 @@ using ContosoUniversity.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using ContosoUniversity.Services;
+using Microsoft.Extensions.Logging;
 
 namespace ContosoUniversity.Controllers
 {
     public class CoursesController : BaseController
     {
+        public CoursesController(NotificationService notificationService, ILogger<BaseController> logger) 
+            : base(notificationService, logger)
+        {
+        }
+
         // GET: Courses
         public ActionResult Index()
         {

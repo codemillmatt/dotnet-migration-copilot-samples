@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ContosoUniversity.Configuration;
+using ContosoUniversity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSystemWebAdapters()
@@ -14,6 +16,13 @@ builder.Services.AddSystemWebAdapters()
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Configure notification queue options
+builder.Services.Configure<NotificationQueueOptions>(
+    builder.Configuration.GetSection(NotificationQueueOptions.SectionName));
+
+// Register NotificationService as a scoped service
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 

@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using ContosoUniversity.Services;
 using ContosoUniversity.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ContosoUniversity.Controllers
 {
     public class NotificationsController : BaseController
     {
+        public NotificationsController(NotificationService notificationService, ILogger<BaseController> logger) 
+            : base(notificationService, logger)
+        {
+        }
+
         // GET: api/notifications - Get pending notifications for admin
         [HttpGet]
         public JsonResult GetNotifications()

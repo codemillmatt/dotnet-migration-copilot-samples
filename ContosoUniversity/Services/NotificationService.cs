@@ -1,34 +1,45 @@
 using System;
-using System.Messaging;
-using System.Configuration;
+using MSMQ.Messaging;
 using ContosoUniversity.Models;
+using ContosoUniversity.Configuration;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace ContosoUniversity.Services
 {
-    public class NotificationService
+    public class NotificationService : IDisposable
     {
         private readonly string _queuePath;
         private readonly MessageQueue _queue;
+        private readonly ILogger<NotificationService> _logger;
 
-        public NotificationService()
+        public NotificationService(IOptions<NotificationQueueOptions> queueOptions, ILogger<NotificationService> logger)
         {
-            // Get queue path from configuration or use default
-            _queuePath = ConfigurationManager.AppSettings["NotificationQueuePath"] ?? @".\Private$\ContosoUniversityNotifications";
+            _logger = logger;
+            _queuePath = queueOptions.Value.QueuePath;
             
-            // Ensure the queue exists
-            if (!MessageQueue.Exists(_queuePath))
+            try
             {
-                _queue = MessageQueue.Create(_queuePath);
-                _queue.SetPermissions("Everyone", MessageQueueAccessRights.FullControl);
+                // Ensure the queue exists
+                if (!MessageQueue.Exists(_queuePath))
+                {
+                    _queue = MessageQueue.Create(_queuePath);
+                    _queue.SetPermissions("Everyone", MessageQueueAccessRights.FullControl);
+                }
+                else
+                {
+                    _queue = new MessageQueue(_queuePath);
+                }
+                
+                // Configure queue formatter
+                _queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
             }
-            else
+            catch (Exception ex)
             {
-                _queue = new MessageQueue(_queuePath);
+                _logger.LogError(ex, "Failed to initialize notification queue at path: {QueuePath}", _queuePath);
+                throw;
             }
-            
-            // Configure queue formatter
-            _queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
         }
 
         public void SendNotification(string entityType, string entityId, EntityOperation operation, string userName = null)
@@ -59,11 +70,12 @@ namespace ContosoUniversity.Services
                 };
 
                 _queue.Send(message);
+                _logger.LogInformation("Notification sent for {EntityType} {Operation}", entityType, operation);
             }
             catch (Exception ex)
             {
                 // Log error but don't break the main operation
-                System.Diagnostics.Debug.WriteLine($"Failed to send notification: {ex.Message}");
+                _logger.LogError(ex, "Failed to send notification for {EntityType} {Operation}", entityType, operation);
             }
         }
 
@@ -82,7 +94,7 @@ namespace ContosoUniversity.Services
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to receive notification: {ex.Message}");
+                _logger.LogError(ex, "Failed to receive notification");
                 return null;
             }
         }

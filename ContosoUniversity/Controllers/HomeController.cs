@@ -2,12 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models.SchoolViewModels;
+using ContosoUniversity.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ContosoUniversity.Controllers
 {
     public class HomeController : BaseController
     {
+        public HomeController(NotificationService notificationService, ILogger<BaseController> logger) 
+            : base(notificationService, logger)
+        {
+        }
+
         public ActionResult Index()
         {
             return View();

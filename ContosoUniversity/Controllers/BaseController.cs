@@ -3,16 +3,20 @@ using ContosoUniversity.Services;
 using ContosoUniversity.Models;
 using ContosoUniversity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ContosoUniversity.Controllers
 {
     public abstract class BaseController : Controller
     {
         protected SchoolContext db;
-        protected NotificationService notificationService = new NotificationService();
+        protected readonly NotificationService notificationService;
+        protected readonly ILogger<BaseController> logger;
 
-        public BaseController()
+        public BaseController(NotificationService notificationService, ILogger<BaseController> logger)
         {
+            this.notificationService = notificationService;
+            this.logger = logger;
             db = SchoolContextFactory.Create();
         }
 
@@ -31,7 +35,7 @@ namespace ContosoUniversity.Controllers
             catch (Exception ex)
             {
                 // Log the error but don't break the main operation
-                System.Diagnostics.Debug.WriteLine($"Failed to send notification: {ex.Message}");
+                logger.LogError(ex, "Failed to send notification for {EntityType} {Operation}", entityType, operation);
             }
         }
 
@@ -40,7 +44,7 @@ namespace ContosoUniversity.Controllers
             if (disposing)
             {
                 db?.Dispose();
-                notificationService?.Dispose();
+                // NotificationService is now managed by DI container, so we don't dispose it manually
             }
             base.Dispose(disposing);
         }
