@@ -4,6 +4,7 @@ using ContosoUniversity.Services;
 using ContosoUniversity.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ContosoUniversity.Data;
 
 namespace ContosoUniversity.Controllers
 {
@@ -36,14 +37,14 @@ namespace ContosoUniversity.Controllers
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error retrieving notifications: {ex.Message}");
-                return Json(new { success = false, message = "Error retrieving notifications" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Error retrieving notifications" });
             }
 
             return Json(new { 
                 success = true, 
                 notifications = notifications,
                 count = notifications.Count 
-            }, JsonRequestBehavior.AllowGet);
+            });
         }
 
         // POST: api/notifications/mark-read

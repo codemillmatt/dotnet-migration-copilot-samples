@@ -8,14 +8,6 @@ using ContosoUniversity.Services;
 using ContosoUniversity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSystemWebAdapters()
-    .AddWrappedAspNetCoreSession()
-    .AddJsonSessionSerializer(options =>
-    {
-        options.RegisterKey<string>("MachineName");
-        options.RegisterKey<string>("SessionStartTime");
-    })
-    .AddHttpApplication<MvcApplication>();
 
 // Add Entity Framework DbContext
 builder.Services.AddDbContext<SchoolContext>(options =>
@@ -23,6 +15,9 @@ builder.Services.AddDbContext<SchoolContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Configure session
+builder.Services.AddSession();
 
 // Configure notification queue options
 builder.Services.Configure<NotificationQueueOptions>(
@@ -57,14 +52,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
-app.UseSystemWebAdapters();
-
-app.MapControllers()
-    .RequireSystemWebAdapterSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .RequireSystemWebAdapterSession();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
 using ContosoUniversity.Models.SchoolViewModels;
@@ -141,27 +142,46 @@ namespace ContosoUniversity.Controllers
         // POST: Instructors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? id, string[] selectedCourses)
+        public ActionResult Edit([Bind("ID,LastName,FirstMidName,HireDate")] Instructor instructor, string[] selectedCourses)
         {
-            if (id == null)
+            if (instructor.ID == 0)
             {
                 return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
+
             var instructorToUpdate = db.Instructors
                .Include(i => i.OfficeAssignment)
                .Include(i => i.CourseAssignments)
                    .ThenInclude(c => c.Course)
-               .Where(i => i.ID == id)
+               .Where(i => i.ID == instructor.ID)
                .Single();
 
-            if (TryUpdateModel(instructorToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "HireDate", "OfficeAssignment" }))
+            // Update the properties from the bound model
+            instructorToUpdate.LastName = instructor.LastName;
+            instructorToUpdate.FirstMidName = instructor.FirstMidName;
+            instructorToUpdate.HireDate = instructor.HireDate;
+
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    if (String.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment.Location))
+                    // Handle OfficeAssignment from form data
+                    var officeLocation = Request.Form["OfficeAssignment.Location"].ToString();
+                    if (String.IsNullOrWhiteSpace(officeLocation))
                     {
-                        instructorToUpdate.OfficeAssignment = null;
+                        if (instructorToUpdate.OfficeAssignment != null)
+                        {
+                            db.OfficeAssignments.Remove(instructorToUpdate.OfficeAssignment);
+                            instructorToUpdate.OfficeAssignment = null;
+                        }
+                    }
+                    else
+                    {
+                        if (instructorToUpdate.OfficeAssignment == null)
+                        {
+                            instructorToUpdate.OfficeAssignment = new OfficeAssignment { InstructorID = instructorToUpdate.ID };
+                        }
+                        instructorToUpdate.OfficeAssignment.Location = officeLocation;
                     }
 
                     UpdateInstructorCourses(selectedCourses, instructorToUpdate);
