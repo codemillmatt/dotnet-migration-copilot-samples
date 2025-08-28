@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ContosoUniversity.Services;
 using ContosoUniversity.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace ContosoUniversity.Controllers
 
         // GET: api/notifications - Get pending notifications for admin
         [HttpGet]
-        public JsonResult GetNotifications()
+        public async Task<JsonResult> GetNotifications()
         {
             var notifications = new List<Notification>();
             
@@ -25,7 +26,7 @@ namespace ContosoUniversity.Controllers
             {
                 // Read all available notifications from the queue
                 Notification notification;
-                while ((notification = notificationService.ReceiveNotification()) != null)
+                while ((notification = await notificationService.ReceiveNotificationAsync()) != null)
                 {
                     notifications.Add(notification);
                     
@@ -36,7 +37,7 @@ namespace ContosoUniversity.Controllers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error retrieving notifications: {ex.Message}");
+                logger.LogError(ex, "Error retrieving notifications from Service Bus");
                 return Json(new { success = false, message = "Error retrieving notifications" });
             }
 
@@ -58,7 +59,7 @@ namespace ContosoUniversity.Controllers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error marking notification as read: {ex.Message}");
+                logger.LogError(ex, "Error marking notification {NotificationId} as read", id);
                 return Json(new { success = false, message = "Error updating notification" });
             }
         }

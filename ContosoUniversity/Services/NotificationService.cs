@@ -1,5 +1,7 @@
 using System;
-using MSMQ.Messaging;
+using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
+using Azure.Identity;
 using ContosoUniversity.Models;
 using ContosoUniversity.Configuration;
 using Newtonsoft.Json;
@@ -10,44 +12,38 @@ namespace ContosoUniversity.Services
 {
     public class NotificationService : IDisposable
     {
-        private readonly string _queuePath;
-        private readonly MessageQueue _queue;
+        private readonly ServiceBusClient _serviceBusClient;
+        private readonly ServiceBusSender _sender;
+        private readonly string _queueName;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(IOptions<NotificationQueueOptions> queueOptions, ILogger<NotificationService> logger)
         {
             _logger = logger;
-            _queuePath = queueOptions.Value.QueuePath;
+            _queueName = queueOptions.Value.QueueName;
             
             try
             {
-                // Ensure the queue exists
-                if (!MessageQueue.Exists(_queuePath))
-                {
-                    _queue = MessageQueue.Create(_queuePath);
-                    _queue.SetPermissions("Everyone", MessageQueueAccessRights.FullControl);
-                }
-                else
-                {
-                    _queue = new MessageQueue(_queuePath);
-                }
+                // Use Managed Identity to connect to Service Bus
+                var fullyQualifiedNamespace = queueOptions.Value.ServiceBusNamespace;
+                _serviceBusClient = new ServiceBusClient(fullyQualifiedNamespace, new DefaultAzureCredential());
+                _sender = _serviceBusClient.CreateSender(_queueName);
                 
-                // Configure queue formatter
-                _queue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+                _logger.LogInformation("NotificationService initialized with Service Bus namespace: {Namespace}", fullyQualifiedNamespace);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to initialize notification queue at path: {QueuePath}", _queuePath);
+                _logger.LogError(ex, "Failed to initialize NotificationService with Service Bus");
                 throw;
             }
         }
 
-        public void SendNotification(string entityType, string entityId, EntityOperation operation, string userName = null)
+        public async Task SendNotificationAsync(string entityType, string entityId, EntityOperation operation, string userName = null)
         {
-            SendNotification(entityType, entityId, null, operation, userName);
+            await SendNotificationAsync(entityType, entityId, null, operation, userName);
         }
 
-        public void SendNotification(string entityType, string entityId, string entityDisplayName, EntityOperation operation, string userName = null)
+        public async Task SendNotificationAsync(string entityType, string entityId, string entityDisplayName, EntityOperation operation, string userName = null)
         {
             try
             {
@@ -57,20 +53,21 @@ namespace ContosoUniversity.Services
                     EntityId = entityId,
                     Operation = operation.ToString(),
                     Message = GenerateMessage(entityType, entityId, entityDisplayName, operation),
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = DateTime.UtcNow,
                     CreatedBy = userName ?? "System",
                     IsRead = false
                 };
 
                 var jsonMessage = JsonConvert.SerializeObject(notification);
-                var message = new Message(jsonMessage)
+                var serviceBusMessage = new ServiceBusMessage(jsonMessage)
                 {
-                    Label = $"{entityType} {operation}",
-                    Priority = MessagePriority.Normal
+                    Subject = $"{entityType}_{operation}",
+                    MessageId = Guid.NewGuid().ToString(),
+                    ContentType = "application/json"
                 };
 
-                _queue.Send(message);
-                _logger.LogInformation("Notification sent for {EntityType} {Operation}", entityType, operation);
+                await _sender.SendMessageAsync(serviceBusMessage);
+                _logger.LogInformation("Notification sent to Service Bus for {EntityType} {Operation}", entityType, operation);
             }
             catch (Exception ex)
             {
@@ -79,22 +76,29 @@ namespace ContosoUniversity.Services
             }
         }
 
-        public Notification ReceiveNotification()
+        public async Task<Notification> ReceiveNotificationAsync()
         {
             try
             {
-                var message = _queue.Receive(TimeSpan.FromSeconds(1));
-                var jsonContent = message.Body.ToString();
-                return JsonConvert.DeserializeObject<Notification>(jsonContent);
-            }
-            catch (MessageQueueException ex) when (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
-            {
-                // No messages available
+                await using var receiver = _serviceBusClient.CreateReceiver(_queueName);
+                var receivedMessage = await receiver.ReceiveMessageAsync(TimeSpan.FromSeconds(1));
+                
+                if (receivedMessage != null)
+                {
+                    var jsonContent = receivedMessage.Body.ToString();
+                    var notification = JsonConvert.DeserializeObject<Notification>(jsonContent);
+                    
+                    // Complete the message to remove it from the queue
+                    await receiver.CompleteMessageAsync(receivedMessage);
+                    
+                    return notification;
+                }
+                
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to receive notification");
+                _logger.LogError(ex, "Failed to receive notification from Service Bus");
                 return null;
             }
         }
@@ -103,6 +107,7 @@ namespace ContosoUniversity.Services
         {
             // In a real implementation, you might want to store notifications in database as well
             // for persistence and tracking read status
+            _logger.LogInformation("Notification {NotificationId} marked as read", notificationId);
         }
 
         private string GenerateMessage(string entityType, string entityId, string entityDisplayName, EntityOperation operation)
@@ -111,22 +116,19 @@ namespace ContosoUniversity.Services
                 ? $"{entityType} '{entityDisplayName}'" 
                 : $"{entityType} (ID: {entityId})";
 
-            switch (operation)
+            return operation switch
             {
-                case EntityOperation.CREATE:
-                    return $"New {displayText} has been created";
-                case EntityOperation.UPDATE:
-                    return $"{displayText} has been updated";
-                case EntityOperation.DELETE:
-                    return $"{displayText} has been deleted";
-                default:
-                    return $"{displayText} operation: {operation}";
-            }
+                EntityOperation.CREATE => $"New {displayText} has been created",
+                EntityOperation.UPDATE => $"{displayText} has been updated",
+                EntityOperation.DELETE => $"{displayText} has been deleted",
+                _ => $"{displayText} operation: {operation}"
+            };
         }
 
         public void Dispose()
         {
-            _queue?.Dispose();
+            _sender?.DisposeAsync().AsTask().Wait();
+            _serviceBusClient?.DisposeAsync().AsTask().Wait();
         }
     }
 }
