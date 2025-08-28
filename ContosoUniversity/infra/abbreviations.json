@@ -24,7 +24,7 @@
   "computeVirtualMachineScaleSets": "vmss-",
   "containerAppsContainerApps": "ca-",
   "containerInstanceContainerGroups": "ci-",
-  "containerRegistryRegistries": "cr-",
+  "containerRegistryRegistries": "cr",
   "containerServiceManagedClusters": "aks-",
   "databricksWorkspaces": "dbw-",
   "dataFactoryFactories": "adf-",

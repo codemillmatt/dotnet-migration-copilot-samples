@@ -37,6 +37,9 @@ param logAnalyticsWorkspaceName string = ''
 @description('Name of the Application Insights instance')
 param applicationInsightsName string = ''
 
+@description('Name of the Container Registry')
+param containerRegistryName string = ''
+
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = {
@@ -85,7 +88,6 @@ module sqlServer './core/database/sqlserver.bicep' = {
   }
 }
 
-// Create Service Bus first without container app permissions
 module serviceBus './core/messaging/servicebus.bicep' = {
   name: 'servicebus'
   scope: rg
@@ -97,15 +99,28 @@ module serviceBus './core/messaging/servicebus.bicep' = {
   }
 }
 
-module app './core/host/container-app.bicep' = {
+module containerRegistry './core/host/container-registry.bicep' = {
+  name: 'container-registry'
+  scope: rg
+  params: {
+    name: !empty(containerRegistryName) ? containerRegistryName : 'cr${resourceToken}' // ACR names must be alphanumeric only
+    location: location
+    tags: tags
+    principalId: principalId
+  }
+}
+
+module containerApp './core/host/container-app.bicep' = {
   name: 'container-app'
   scope: rg
   params: {
     name: !empty(containerAppName) ? containerAppName : '${abbrs.containerAppsContainerApps}${resourceToken}'
     location: location
-    tags: tags
+    tags: union(tags, {
+      'azd-service-name': 'web'
+    })
     containerAppsEnvironmentName: containerAppsEnv.outputs.name
-    containerRegistryName: ''
+    containerRegistryName: containerRegistry.outputs.name
     env: [
       {
         name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
@@ -123,12 +138,8 @@ module app './core/host/container-app.bicep' = {
         name: 'NotificationQueue__QueueName'
         value: 'notifications'
       }
-      {
-        name: 'AZURE_CLIENT_ID'
-        value: app.outputs.identityClientId
-      }
     ]
-    imageName: 'mcr.microsoft.com/dotnet/samples:aspnetapp'
+    imageName: 'nginx:latest' // Placeholder image, AZD will replace this with the built image
     targetPort: 8080
   }
 }
@@ -139,7 +150,7 @@ module sqlRoleAssignment './core/security/sql-role-assignment.bicep' = {
   scope: rg
   params: {
     sqlServerName: sqlServer.outputs.AZURE_SQL_SERVER
-    principalId: app.outputs.identityPrincipalId
+    principalId: containerApp.outputs.identityPrincipalId
   }
 }
 
@@ -148,7 +159,7 @@ module serviceBusAppRoleAssignment './core/security/servicebus-role-assignment.b
   scope: rg
   params: {
     serviceBusNamespaceName: serviceBus.outputs.name
-    principalId: app.outputs.identityPrincipalId
+    principalId: containerApp.outputs.identityPrincipalId
   }
 }
 
@@ -156,8 +167,10 @@ module serviceBusAppRoleAssignment './core/security/servicebus-role-assignment.b
 output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applicationInsightsConnectionString
 output AZURE_CONTAINER_APPS_ENVIRONMENT_ID string = containerAppsEnv.outputs.id
 output AZURE_CONTAINER_APPS_ENVIRONMENT_NAME string = containerAppsEnv.outputs.name
-output AZURE_CONTAINER_APP_NAME string = app.outputs.name
-output AZURE_CONTAINER_APP_FQDN string = app.outputs.fqdn
+output AZURE_CONTAINER_APP_NAME string = containerApp.outputs.name
+output AZURE_CONTAINER_APP_FQDN string = containerApp.outputs.fqdn
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerRegistry.outputs.loginServer
+output AZURE_CONTAINER_REGISTRY_NAME string = containerRegistry.outputs.name
 output AZURE_SQL_SERVER string = sqlServer.outputs.AZURE_SQL_SERVER
 output AZURE_SQL_DATABASE string = sqlServer.outputs.AZURE_SQL_DATABASE
-output AZURE_SERVICE_BUS_NAMESPACE string = serviceBus.outputs.nameoutput AZURE_SERVICE_BUS_NAMESPACE string = serviceBus.outputs.name
+output AZURE_SERVICE_BUS_NAMESPACE string = serviceBus.outputs.name

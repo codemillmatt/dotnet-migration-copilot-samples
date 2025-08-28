@@ -12,10 +12,11 @@ namespace ContosoUniversity.Services
 {
     public class NotificationService : IDisposable
     {
-        private readonly ServiceBusClient _serviceBusClient;
-        private readonly ServiceBusSender _sender;
+        private readonly ServiceBusClient? _serviceBusClient;
+        private readonly ServiceBusSender? _sender;
         private readonly string _queueName;
         private readonly ILogger<NotificationService> _logger;
+        private readonly bool _isConfigured;
 
         public NotificationService(IOptions<NotificationQueueOptions> queueOptions, ILogger<NotificationService> logger)
         {
@@ -24,17 +25,26 @@ namespace ContosoUniversity.Services
             
             try
             {
-                // Use Managed Identity to connect to Service Bus
                 var fullyQualifiedNamespace = queueOptions.Value.ServiceBusNamespace;
+                
+                if (string.IsNullOrEmpty(fullyQualifiedNamespace))
+                {
+                    _logger.LogWarning("Service Bus namespace not configured. Notification service will operate in dummy mode.");
+                    _isConfigured = false;
+                    return;
+                }
+
+                // Use Managed Identity to connect to Service Bus
                 _serviceBusClient = new ServiceBusClient(fullyQualifiedNamespace, new DefaultAzureCredential());
                 _sender = _serviceBusClient.CreateSender(_queueName);
+                _isConfigured = true;
                 
                 _logger.LogInformation("NotificationService initialized with Service Bus namespace: {Namespace}", fullyQualifiedNamespace);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to initialize NotificationService with Service Bus");
-                throw;
+                _logger.LogError(ex, "Failed to initialize NotificationService with Service Bus. Operating in dummy mode.");
+                _isConfigured = false;
             }
         }
 
@@ -45,6 +55,12 @@ namespace ContosoUniversity.Services
 
         public async Task SendNotificationAsync(string entityType, string entityId, string entityDisplayName, EntityOperation operation, string userName = null)
         {
+            if (!_isConfigured || _sender == null)
+            {
+                _logger.LogWarning("Service Bus not configured. Notification not sent for {EntityType} {Operation}", entityType, operation);
+                return;
+            }
+
             try
             {
                 var notification = new Notification
@@ -76,8 +92,14 @@ namespace ContosoUniversity.Services
             }
         }
 
-        public async Task<Notification> ReceiveNotificationAsync()
+        public async Task<Notification?> ReceiveNotificationAsync()
         {
+            if (!_isConfigured || _serviceBusClient == null)
+            {
+                _logger.LogWarning("Service Bus not configured. Cannot receive notifications.");
+                return null;
+            }
+
             try
             {
                 await using var receiver = _serviceBusClient.CreateReceiver(_queueName);
@@ -127,8 +149,11 @@ namespace ContosoUniversity.Services
 
         public void Dispose()
         {
-            _sender?.DisposeAsync().AsTask().Wait();
-            _serviceBusClient?.DisposeAsync().AsTask().Wait();
+            if (_isConfigured)
+            {
+                _sender?.DisposeAsync().AsTask().Wait();
+                _serviceBusClient?.DisposeAsync().AsTask().Wait();
+            }
         }
     }
 }

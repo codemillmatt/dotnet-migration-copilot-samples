@@ -6,6 +6,7 @@
     <Copyright>Copyright ©  2024</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
+    <UserSecretsId>3e9a28d4-8fa7-4956-a74a-bbe7bbd656d1</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <!-- Azure Services -->
@@ -27,18 +28,11 @@
     <!-- Health Checks -->
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.0" />
     
-    <!-- UI and Frontend -->
-    <PackageReference Include="bootstrap" Version="5.3.3" />
-    <PackageReference Include="jQuery" Version="3.7.1" />
-    <PackageReference Include="jQuery.Validation" Version="1.21.0" />
-    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
-    
     <!-- Utilities -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.8" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".azure\plan.copilot.md" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
   </ItemGroup>
   <ItemGroup>

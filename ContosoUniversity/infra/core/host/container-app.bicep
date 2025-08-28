@@ -48,7 +48,9 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-pr
 resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: '${name}-identity'
   location: location
-  tags: tags
+  tags: contains(tags, 'azd-service-name') ? {
+    'azd-env-name': tags['azd-env-name']
+  } : tags
 }
 
 resource acrPullRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(containerRegistryName)) {

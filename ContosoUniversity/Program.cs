@@ -12,80 +12,195 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Application Insights telemetry
-builder.Services.AddApplicationInsightsTelemetry();
-
-// Add Entity Framework DbContext with Azure SQL Database
-builder.Services.AddDbContext<SchoolContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Add services to the container
-builder.Services.AddControllersWithViews();
-
-// Configure session
-builder.Services.AddSession(options =>
+// Configure logging early
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+if (builder.Environment.IsDevelopment())
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+    builder.Logging.AddDebug();
+}
 
-// Configure notification queue options
-builder.Services.Configure<NotificationQueueOptions>(
-    builder.Configuration.GetSection(NotificationQueueOptions.SectionName));
+var logger = LoggerFactory.Create(config => config.AddConsole()).CreateLogger<Program>();
 
-// Register NotificationService as a scoped service
-builder.Services.AddScoped<NotificationService>();
-
-// Add health checks
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<SchoolContext>()
-    .AddCheck("self", () => HealthCheckResult.Healthy());
-
-var app = builder.Build();
-
-// Initialize database on startup (only in development)
-if (app.Environment.IsDevelopment())
+try
 {
-    using (var scope = app.Services.CreateScope())
+    logger.LogInformation("Starting Contoso University application...");
+    logger.LogInformation("Environment: {Environment}", builder.Environment.EnvironmentName);
+
+    // Log configuration for debugging
+    logger.LogInformation("Configuration Sources:");
+    foreach (var source in builder.Configuration.Sources)
     {
-        var context = scope.ServiceProvider.GetRequiredService<SchoolContext>();
+        logger.LogInformation("  - {Source}", source.GetType().Name);
+    }
+
+    // Add Application Insights telemetry
+    var appInsightsConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+    if (!string.IsNullOrEmpty(appInsightsConnectionString))
+    {
+        logger.LogInformation("Application Insights configured");
+        builder.Services.AddApplicationInsightsTelemetry(appInsightsConnectionString);
+    }
+    else
+    {
+        logger.LogWarning("Application Insights not configured - APPLICATIONINSIGHTS_CONNECTION_STRING is missing");
+    }
+
+    // Build connection string from environment variables
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        connectionString = builder.Configuration["ConnectionStrings__DefaultConnection"];
+    }
+
+    logger.LogInformation("Database connection string configured: {HasConnectionString}", !string.IsNullOrEmpty(connectionString));
+
+    // Add Entity Framework DbContext with Azure SQL Database
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        builder.Services.AddDbContext<SchoolContext>(options =>
+        {
+            options.UseSqlServer(connectionString);
+            options.EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+            options.EnableDetailedErrors(builder.Environment.IsDevelopment());
+        });
+        
+        logger.LogInformation("Entity Framework DbContext configured for SQL Server");
+    }
+    else
+    {
+        logger.LogError("Database connection string is not configured. Check environment variables.");
+        throw new InvalidOperationException("Database connection string is not configured. Check environment variables.");
+    }
+
+    // Add services to the container
+    builder.Services.AddControllersWithViews();
+
+    // Configure session
+    builder.Services.AddSession(options =>
+    {
+        options.IdleTimeout = TimeSpan.FromMinutes(30);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
+
+    // Configure notification queue options
+    var serviceBusNamespace = builder.Configuration["NotificationQueue__ServiceBusNamespace"];
+    if (string.IsNullOrEmpty(serviceBusNamespace))
+    {
+        serviceBusNamespace = builder.Configuration["AZURE_SERVICE_BUS_NAMESPACE"];
+        if (!string.IsNullOrEmpty(serviceBusNamespace) && !serviceBusNamespace.EndsWith(".servicebus.windows.net"))
+        {
+            serviceBusNamespace += ".servicebus.windows.net";
+        }
+    }
+
+    logger.LogInformation("Service Bus namespace: {ServiceBusNamespace}", serviceBusNamespace ?? "Not configured");
+
+    builder.Services.Configure<NotificationQueueOptions>(options =>
+    {
+        options.ServiceBusNamespace = serviceBusNamespace ?? "";
+        options.QueueName = builder.Configuration["NotificationQueue__QueueName"] ?? "notifications";
+    });
+
+    // Register NotificationService as a scoped service
+    if (!string.IsNullOrEmpty(serviceBusNamespace))
+    {
+        builder.Services.AddScoped<NotificationService>();
+        logger.LogInformation("NotificationService configured with Service Bus");
+    }
+    else
+    {
+        logger.LogWarning("NotificationService not configured - Service Bus namespace is missing");
+        // Register a dummy service to prevent DI errors
+        builder.Services.AddScoped<NotificationService>(provider => 
+        {
+            var dummyOptions = Microsoft.Extensions.Options.Options.Create(new NotificationQueueOptions());
+            var dummyLogger = provider.GetRequiredService<ILogger<NotificationService>>();
+            return new NotificationService(dummyOptions, dummyLogger);
+        });
+    }
+
+    // Add health checks
+    builder.Services.AddHealthChecks()
+        .AddDbContextCheck<SchoolContext>("database")
+        .AddCheck("self", () => HealthCheckResult.Healthy("Application is healthy"));
+
+    var app = builder.Build();
+
+    logger.LogInformation("Application built successfully");
+
+    // Initialize database on startup (only in development or when explicitly enabled)
+    var initializeDb = builder.Configuration.GetValue<bool>("InitializeDatabase", builder.Environment.IsDevelopment());
+    if (initializeDb)
+    {
         try
         {
+            logger.LogInformation("Attempting to initialize database...");
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<SchoolContext>();
+            
+            // Test database connectivity
+            await context.Database.CanConnectAsync();
+            logger.LogInformation("Database connection test successful");
+            
             DbInitializer.Initialize(context);
+            logger.LogInformation("Database initialization completed successfully");
         }
         catch (Exception ex)
         {
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            logger.LogError(ex, "An error occurred while initializing the database");
+            logger.LogError(ex, "Database initialization failed: {Message}", ex.Message);
+            if (builder.Environment.IsDevelopment())
+            {
+                throw;
+            }
         }
     }
-}
 
-// Configure the HTTP request pipeline
-if (!app.Environment.IsDevelopment())
+    // Configure the HTTP request pipeline
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
+
+    app.UseStatusCodePagesWithReExecute("/Home/StatusErrorCode", "?code={0}");
+
+    // Configure for reverse proxy (Container Apps)
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | 
+                          Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+    });
+
+    // Don't redirect to HTTPS in container - let the reverse proxy handle it
+    if (!app.Environment.IsProduction())
+    {
+        app.UseHttpsRedirection();
+    }
+
+    app.UseStaticFiles();
+
+    app.UseRouting();
+    app.UseSession();
+
+    // Add health check endpoints
+    app.MapHealthChecks("/health");
+    app.MapHealthChecks("/healthz");
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    // Log startup completion
+    logger.LogInformation("Contoso University application configuration completed");
+    logger.LogInformation("Health check endpoints: /health, /healthz");
+    logger.LogInformation("Starting web host...");
+
+    app.Run();
+}
+catch (Exception ex)
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    logger.LogCritical(ex, "Application failed to start: {Message}", ex.Message);
+    throw;
 }
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-}
-
-app.UseStatusCodePagesWithReExecute("/Home/StatusErrorCode", "?code={0}");
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-app.UseSession();
-
-// Add health check endpoint
-app.MapHealthChecks("/health");
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();

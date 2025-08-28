@@ -9,8 +9,3 @@ services:
     project: .
     language: dotnet
     host: containerapp
-
-hooks:
-  postdeploy:
-    shell: sh
-    run: echo "Deployment completed successfully!"

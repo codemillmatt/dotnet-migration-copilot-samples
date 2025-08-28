@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.37.4.10188",
+      "templateHash": "12231162370028587103"
+    }
+  },
+  "parameters": {
+    "sqlServerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the SQL Server"
+      }
+    },
+    "principalId": {
+      "type": "string",
+      "metadata": {
+        "description": "Principal ID to assign SQL permissions"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "scope": "[format('Microsoft.Sql/servers/{0}', parameters('sqlServerName'))]",
+      "name": "[guid(resourceId('Microsoft.Sql/servers', parameters('sqlServerName')), parameters('principalId'), '9b7fa17d-e63e-47b0-bb0a-15c516ac86ec')]",
+      "properties": {
+        "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '9b7fa17d-e63e-47b0-bb0a-15c516ac86ec')]",
+        "principalType": "ServicePrincipal",
+        "principalId": "[parameters('principalId')]"
+      }
+    }
+  ],
+  "outputs": {
+    "roleAssignmentId": {
+      "type": "string",
+      "value": "[extensionResourceId(resourceId('Microsoft.Sql/servers', parameters('sqlServerName')), 'Microsoft.Authorization/roleAssignments', guid(resourceId('Microsoft.Sql/servers', parameters('sqlServerName')), parameters('principalId'), '9b7fa17d-e63e-47b0-bb0a-15c516ac86ec'))]"
+    }
+  }
+}
