@@ -16,8 +16,8 @@ namespace ContosoUniversity.Controllers
 {
     public class CoursesController : BaseController
     {
-        public CoursesController(NotificationService notificationService, ILogger<BaseController> logger) 
-            : base(notificationService, logger)
+        public CoursesController(SchoolContext context, NotificationService notificationService, ILogger<BaseController> logger) 
+            : base(context, notificationService, logger)
         {
         }
 

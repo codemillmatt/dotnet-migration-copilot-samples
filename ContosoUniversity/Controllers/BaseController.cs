@@ -9,15 +9,15 @@ namespace ContosoUniversity.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected SchoolContext db;
+        protected readonly SchoolContext db;
         protected readonly NotificationService notificationService;
         protected readonly ILogger<BaseController> logger;
 
-        public BaseController(NotificationService notificationService, ILogger<BaseController> logger)
+        public BaseController(SchoolContext context, NotificationService notificationService, ILogger<BaseController> logger)
         {
+            this.db = context;
             this.notificationService = notificationService;
             this.logger = logger;
-            db = SchoolContextFactory.Create();
         }
 
         protected void SendEntityNotification(string entityType, string entityId, EntityOperation operation)
