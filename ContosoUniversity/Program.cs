@@ -53,19 +53,56 @@ try
         connectionString = builder.Configuration["ConnectionStrings__DefaultConnection"];
     }
 
+    // If still empty, try to build from individual components
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        var sqlServer = builder.Configuration["AZURE_SQL_SERVER"];
+        var sqlDatabase = builder.Configuration["AZURE_SQL_DATABASE"];
+        
+        if (!string.IsNullOrEmpty(sqlServer) && !string.IsNullOrEmpty(sqlDatabase))
+        {
+            connectionString = $"Server=tcp:{sqlServer}.database.windows.net;Database={sqlDatabase};Authentication=Active Directory Default;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            logger.LogInformation("Built connection string from environment variables");
+        }
+    }
+
     logger.LogInformation("Database connection string configured: {HasConnectionString}", !string.IsNullOrEmpty(connectionString));
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        // Log connection details (without sensitive info)
+        var serverMatch = System.Text.RegularExpressions.Regex.Match(connectionString, @"Server=tcp:([^;]+)");
+        var databaseMatch = System.Text.RegularExpressions.Regex.Match(connectionString, @"Database=([^;]+)");
+        if (serverMatch.Success && databaseMatch.Success)
+        {
+            logger.LogInformation("Connecting to SQL Server: {Server}, Database: {Database}", 
+                serverMatch.Groups[1].Value, databaseMatch.Groups[1].Value);
+        }
+    }
 
     // Add Entity Framework DbContext with Azure SQL Database
     if (!string.IsNullOrEmpty(connectionString))
     {
         builder.Services.AddDbContext<SchoolContext>(options =>
         {
-            options.UseSqlServer(connectionString);
-            options.EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
-            options.EnableDetailedErrors(builder.Environment.IsDevelopment());
+            options.UseSqlServer(connectionString, sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+                sqlOptions.CommandTimeout(120);
+            });
+            
+            if (builder.Environment.IsDevelopment())
+            {
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            }
+            
+            options.LogTo(message => logger.LogInformation("EF Core: {Message}", message), Microsoft.Extensions.Logging.LogLevel.Information);
         });
         
-        logger.LogInformation("Entity Framework DbContext configured for SQL Server");
+        logger.LogInformation("Entity Framework DbContext configured for SQL Server with retry policy");
     }
     else
     {

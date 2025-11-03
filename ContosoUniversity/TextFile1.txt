@@ -1,0 +1,332 @@
+2025-08-28T03:52:09.326185383Z warn: Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware[1]
+2025-08-28T03:52:09.326389985Z       Unknown proxy: [::ffff:100.100.0.154]:35306
+2025-08-28T03:52:09.327656598Z warn: ContosoUniversity.Services.NotificationService[0]
+2025-08-28T03:52:09.327680099Z       Service Bus namespace not configured. Notification service will operate in dummy mode.
+
+2025-08-28T03:52:09.436504948Z fail: Microsoft.EntityFrameworkCore.Database.Connection[20004]
+2025-08-28T03:52:09.436546149Z       An error occurred using the connection to database 'ContosoUniversity' on server 'tcp:sql-c5nyxvpm7xvwu.database.windows.net'.
+
+2025-08-28T03:52:09.437802262Z info: Program[0]
+2025-08-28T03:52:09.437862263Z       EF Core: fail: 08/28/2025 03:52:09.436 RelationalEventId.ConnectionError[20004] (Microsoft.EntityFrameworkCore.Database.Connection) 
+2025-08-28T03:52:09.437876863Z             An error occurred using the connection to database 'ContosoUniversity' on server 'tcp:sql-c5nyxvpm7xvwu.database.windows.net'.
+2025-08-28T03:52:09.438736672Z fail: Microsoft.EntityFrameworkCore.Query[10100]
+2025-08-28T03:52:09.438754672Z       An exception occurred while iterating over the results of a query for context type 'ContosoUniversity.Data.SchoolContext'.
+2025-08-28T03:52:09.438764272Z       Microsoft.Data.SqlClient.SqlException (0x80131904): ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.438773872Z       See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.438782672Z        ---> Azure.Identity.AuthenticationFailedException: ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.438791772Z       See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.438800273Z        ---> MSAL.NetCore.4.73.1.0.MsalServiceException:
+2025-08-28T03:52:09.438808773Z       	ErrorCode: managed_identity_request_failed
+2025-08-28T03:52:09.438817973Z       Microsoft.Identity.Client.MsalServiceException: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.438826973Z          at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.HandleResponseAsync(AcquireTokenForManagedIdentityParameters parameters, HttpResponse response, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438836473Z          at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.AuthenticateAsync(AcquireTokenForManagedIdentityParameters parameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438845273Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.SendTokenRequestForManagedIdentityAsync(ILoggerAdapter logger, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438854473Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.GetAccessTokenAsync(CancellationToken cancellationToken, ILoggerAdapter logger)
+2025-08-28T03:52:09.438863273Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.ExecuteAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.438871773Z          at Microsoft.Identity.Client.Internal.Requests.RequestBase.<>c__DisplayClass11_1.<<RunAsync>b__1>d.MoveNext()
+2025-08-28T03:52:09.438892774Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.438900274Z          at Microsoft.Identity.Client.Utils.StopwatchService.MeasureCodeBlockAsync(Func`1 codeBlock)
+2025-08-28T03:52:09.438908074Z          at Microsoft.Identity.Client.Internal.Requests.RequestBase.RunAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.438915874Z          at Microsoft.Identity.Client.ApiConfig.Executors.ManagedIdentityExecutor.ExecuteAsync(AcquireTokenCommonParameters commonParameters, AcquireTokenForManagedIdentityParameters managedIdentityParameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438923274Z          at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsyncCore(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438930074Z          at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438936874Z          at Azure.Identity.ManagedIdentityClient.AuthenticateAsync(Boolean async, TokenRequestContext context, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438943674Z          at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.438950374Z       	StatusCode: 400 
+2025-08-28T03:52:09.438956674Z       	ResponseBody:  
+2025-08-28T03:52:09.438962774Z       	Headers: 
+2025-08-28T03:52:09.438969174Z          --- End of inner exception stack trace ---
+2025-08-28T03:52:09.438975674Z          at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.438982175Z          at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439002575Z          at Azure.Identity.ManagedIdentityCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439011175Z          at Azure.Identity.DefaultAzureCredential.GetTokenFromSourcesAsync(TokenCredential[] sources, TokenRequestContext requestContext, Boolean async, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439018375Z          at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439024675Z          at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.439031475Z          at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439038875Z          at Azure.Identity.DefaultAzureCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439046375Z          at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.GetTokenAsync(TokenCredentialKey tokenCredentialKey, String secret, TokenRequestContext tokenRequestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439053075Z          at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.AcquireTokenAsync(SqlAuthenticationParameters parameters)
+2025-08-28T03:52:09.439061775Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.<>c__DisplayClass150_1.<<GetFedAuthToken>b__1>d.MoveNext()
+2025-08-28T03:52:09.439068375Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.439081976Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.439089376Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.439096676Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OnFedAuthInfo(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.439103176Z          at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+2025-08-28T03:52:09.439109776Z          at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+2025-08-28T03:52:09.439116376Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.CompleteLogin(Boolean enlistOK)
+2025-08-28T03:52:09.439122976Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2025-08-28T03:52:09.439129476Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2025-08-28T03:52:09.439135776Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2025-08-28T03:52:09.439142576Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2025-08-28T03:52:09.439149376Z          at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.439157476Z          at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.439189077Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.439200577Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.439208277Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2025-08-28T03:52:09.439215377Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2025-08-28T03:52:09.439222277Z          at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+2025-08-28T03:52:09.439235177Z          at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.439241077Z          at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.439247877Z          at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.439253777Z          at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.439259877Z          at Microsoft.Data.SqlClient.SqlConnection.Open()
+2025-08-28T03:52:09.439265978Z          at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerConnection.OpenDbConnection(Boolean errorsExpected)
+2025-08-28T03:52:09.439271878Z          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternal(Boolean errorsExpected)
+2025-08-28T03:52:09.439278778Z          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.Open(Boolean errorsExpected)
+2025-08-28T03:52:09.439285778Z          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+2025-08-28T03:52:09.439292778Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+2025-08-28T03:52:09.439300578Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+2025-08-28T03:52:09.439306478Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass28_0`2.<Execute>b__0(DbContext context, TState state)
+2025-08-28T03:52:09.439312478Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+2025-08-28T03:52:09.439318178Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+2025-08-28T03:52:09.439324078Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+2025-08-28T03:52:09.439329878Z       ClientConnectionId:3d366c75-0211-4eed-9c04-0c42127f210f
+2025-08-28T03:52:09.439335878Z       ClientConnectionId before routing:1a41ad6b-a422-489f-861b-1f356aefcef5
+2025-08-28T03:52:09.439342478Z       Routing Destination:ad07db51c604.tr4465.westus3-a.worker.database.windows.net,11020
+2025-08-28T03:52:09.439348878Z       Microsoft.Data.SqlClient.SqlException (0x80131904): ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.439354878Z       See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.439372479Z        ---> Azure.Identity.AuthenticationFailedException: ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.439386379Z       See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.439393279Z        ---> MSAL.NetCore.4.73.1.0.MsalServiceException:
+2025-08-28T03:52:09.439399579Z       	ErrorCode: managed_identity_request_failed
+2025-08-28T03:52:09.439405979Z       Microsoft.Identity.Client.MsalServiceException: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.439412379Z          at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.HandleResponseAsync(AcquireTokenForManagedIdentityParameters parameters, HttpResponse response, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439418579Z          at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.AuthenticateAsync(AcquireTokenForManagedIdentityParameters parameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439425079Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.SendTokenRequestForManagedIdentityAsync(ILoggerAdapter logger, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439431379Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.GetAccessTokenAsync(CancellationToken cancellationToken, ILoggerAdapter logger)
+2025-08-28T03:52:09.439437679Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.ExecuteAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.439444179Z          at Microsoft.Identity.Client.Internal.Requests.RequestBase.<>c__DisplayClass11_1.<<RunAsync>b__1>d.MoveNext()
+2025-08-28T03:52:09.439450679Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.439457780Z          at Microsoft.Identity.Client.Utils.StopwatchService.MeasureCodeBlockAsync(Func`1 codeBlock)
+2025-08-28T03:52:09.439464980Z          at Microsoft.Identity.Client.Internal.Requests.RequestBase.RunAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.439471580Z          at Microsoft.Identity.Client.ApiConfig.Executors.ManagedIdentityExecutor.ExecuteAsync(AcquireTokenCommonParameters commonParameters, AcquireTokenForManagedIdentityParameters managedIdentityParameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439478180Z          at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsyncCore(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439484480Z          at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439490880Z          at Azure.Identity.ManagedIdentityClient.AuthenticateAsync(Boolean async, TokenRequestContext context, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439497280Z          at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.439503480Z       	StatusCode: 400 
+2025-08-28T03:52:09.439509780Z       	ResponseBody:  
+2025-08-28T03:52:09.439515780Z       	Headers: 
+2025-08-28T03:52:09.439521880Z          --- End of inner exception stack trace ---
+2025-08-28T03:52:09.439527880Z          at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.439690882Z          at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.441479501Z          at Azure.Identity.ManagedIdentityCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.441506501Z          at Azure.Identity.DefaultAzureCredential.GetTokenFromSourcesAsync(TokenCredential[] sources, TokenRequestContext requestContext, Boolean async, CancellationToken cancellationToken)
+2025-08-28T03:52:09.441515101Z          at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.441521901Z          at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.441528501Z          at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.441535001Z          at Azure.Identity.DefaultAzureCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.441542002Z          at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.GetTokenAsync(TokenCredentialKey tokenCredentialKey, String secret, TokenRequestContext tokenRequestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.441548302Z          at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.AcquireTokenAsync(SqlAuthenticationParameters parameters)
+2025-08-28T03:52:09.441555202Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.<>c__DisplayClass150_1.<<GetFedAuthToken>b__1>d.MoveNext()
+2025-08-28T03:52:09.441561702Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.441568702Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.441575202Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.441581602Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OnFedAuthInfo(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.441588302Z          at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+2025-08-28T03:52:09.441594902Z          at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+2025-08-28T03:52:09.441601602Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.CompleteLogin(Boolean enlistOK)
+2025-08-28T03:52:09.441608102Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2025-08-28T03:52:09.441614602Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2025-08-28T03:52:09.441621202Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2025-08-28T03:52:09.441629702Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+
+2025-08-28T03:52:09.441643103Z          at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.441657703Z          at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.441664703Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.441671403Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.441677903Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+
+2025-08-28T03:52:09.441684303Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2025-08-28T03:52:09.441690903Z          at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+2025-08-28T03:52:09.441697203Z          at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.441703603Z          at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.441710003Z          at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.441716503Z          at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.441722903Z          at Microsoft.Data.SqlClient.SqlConnection.Open()
+2025-08-28T03:52:09.441729604Z          at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerConnection.OpenDbConnection(Boolean errorsExpected)
+2025-08-28T03:52:09.441735604Z          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternal(Boolean errorsExpected)
+2025-08-28T03:52:09.441741904Z          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.Open(Boolean errorsExpected)
+2025-08-28T03:52:09.441749504Z          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+2025-08-28T03:52:09.441756404Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+2025-08-28T03:52:09.441762804Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+2025-08-28T03:52:09.441769704Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass28_0`2.<Execute>b__0(DbContext context, TState state)
+2025-08-28T03:52:09.441776104Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+2025-08-28T03:52:09.441788604Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+2025-08-28T03:52:09.441795104Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+2025-08-28T03:52:09.441801404Z       ClientConnectionId:3d366c75-0211-4eed-9c04-0c42127f210f
+2025-08-28T03:52:09.441807804Z       ClientConnectionId before routing:1a41ad6b-a422-489f-861b-1f356aefcef5
+2025-08-28T03:52:09.441814404Z       Routing Destination:ad07db51c604.tr4465.westus3-a.worker.database.windows.net,11020
+2025-08-28T03:52:09.442509712Z info: Program[0]
+2025-08-28T03:52:09.442521912Z       EF Core: fail: 08/28/2025 03:52:09.442 CoreEventId.QueryIterationFailed[10100] (Microsoft.EntityFrameworkCore.Query) 
+2025-08-28T03:52:09.442529012Z             An exception occurred while iterating over the results of a query for context type 'ContosoUniversity.Data.SchoolContext'.
+2025-08-28T03:52:09.442536412Z             Microsoft.Data.SqlClient.SqlException (0x80131904): ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.442543012Z             See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.442549712Z              ---> Azure.Identity.AuthenticationFailedException: ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.442556112Z             See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.442572012Z              ---> MSAL.NetCore.4.73.1.0.MsalServiceException:
+2025-08-28T03:52:09.442578512Z             	ErrorCode: managed_identity_request_failed
+2025-08-28T03:52:09.442584913Z             Microsoft.Identity.Client.MsalServiceException: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.442591313Z                at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.HandleResponseAsync(AcquireTokenForManagedIdentityParameters parameters, HttpResponse response, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442597713Z                at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.AuthenticateAsync(AcquireTokenForManagedIdentityParameters parameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442604013Z                at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.SendTokenRequestForManagedIdentityAsync(ILoggerAdapter logger, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442610213Z                at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.GetAccessTokenAsync(CancellationToken cancellationToken, ILoggerAdapter logger)
+2025-08-28T03:52:09.442617313Z                at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.ExecuteAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.442624213Z                at Microsoft.Identity.Client.Internal.Requests.RequestBase.<>c__DisplayClass11_1.<<RunAsync>b__1>d.MoveNext()
+2025-08-28T03:52:09.442630513Z             --- End of stack trace from previous location ---
+2025-08-28T03:52:09.442645713Z                at Microsoft.Identity.Client.Utils.StopwatchService.MeasureCodeBlockAsync(Func`1 codeBlock)
+2025-08-28T03:52:09.442652613Z                at Microsoft.Identity.Client.Internal.Requests.RequestBase.RunAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.442659413Z                at Microsoft.Identity.Client.ApiConfig.Executors.ManagedIdentityExecutor.ExecuteAsync(AcquireTokenCommonParameters commonParameters, AcquireTokenForManagedIdentityParameters managedIdentityParameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442665513Z                at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsyncCore(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442671713Z                at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442678014Z                at Azure.Identity.ManagedIdentityClient.AuthenticateAsync(Boolean async, TokenRequestContext context, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442684314Z                at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442690514Z             	StatusCode: 400 
+2025-08-28T03:52:09.442696614Z             	ResponseBody:  
+2025-08-28T03:52:09.442703014Z             	Headers: 
+2025-08-28T03:52:09.442710114Z                --- End of inner exception stack trace ---
+2025-08-28T03:52:09.442717414Z                at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.442728314Z                at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442735014Z                at Azure.Identity.ManagedIdentityCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442741614Z                at Azure.Identity.DefaultAzureCredential.GetTokenFromSourcesAsync(TokenCredential[] sources, TokenRequestContext requestContext, Boolean async, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442747714Z                at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442754014Z                at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.442760314Z                at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442766514Z                at Azure.Identity.DefaultAzureCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442773015Z                at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.GetTokenAsync(TokenCredentialKey tokenCredentialKey, String secret, TokenRequestContext tokenRequestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.442779215Z                at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.AcquireTokenAsync(SqlAuthenticationParameters parameters)
+2025-08-28T03:52:09.442785415Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.<>c__DisplayClass150_1.<<GetFedAuthToken>b__1>d.MoveNext()
+2025-08-28T03:52:09.442792315Z             --- End of stack trace from previous location ---
+2025-08-28T03:52:09.442806515Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.442984217Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.442994817Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OnFedAuthInfo(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.443001717Z                at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+2025-08-28T03:52:09.443009317Z                at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+2025-08-28T03:52:09.443016217Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.CompleteLogin(Boolean enlistOK)
+2025-08-28T03:52:09.443022917Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2025-08-28T03:52:09.443029717Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2025-08-28T03:52:09.443036217Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2025-08-28T03:52:09.445411042Z                at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2025-08-28T03:52:09.445424943Z                at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.445446243Z                at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.445454743Z                at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.445461843Z                at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.445468743Z                at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2025-08-28T03:52:09.445475743Z                at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2025-08-28T03:52:09.445491843Z                at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+2025-08-28T03:52:09.445498543Z                at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.445505343Z                at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.445512043Z                at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.445518244Z                at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.445524544Z                at Microsoft.Data.SqlClient.SqlConnection.Open()
+2025-08-28T03:52:09.445530644Z                at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerConnection.OpenDbConnection(Boolean errorsExpected)
+2025-08-28T03:52:09.445536544Z                at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternal(Boolean errorsExpected)
+2025-08-28T03:52:09.445542544Z                at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.Open(Boolean errorsExpected)
+2025-08-28T03:52:09.445548444Z                at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+2025-08-28T03:52:09.445554344Z                at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+2025-08-28T03:52:09.445560344Z                at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+2025-08-28T03:52:09.445566344Z                at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass28_0`2.<Execute>b__0(DbContext context, TState state)
+2025-08-28T03:52:09.445573244Z                at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+2025-08-28T03:52:09.445579944Z                at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+2025-08-28T03:52:09.445586944Z                at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+2025-08-28T03:52:09.445593344Z             ClientConnectionId:3d366c75-0211-4eed-9c04-0c42127f210f
+2025-08-28T03:52:09.445599844Z             ClientConnectionId before routing:1a41ad6b-a422-489f-861b-1f356aefcef5
+2025-08-28T03:52:09.445606144Z             Routing Destination:ad07db51c604.tr4465.westus3-a.worker.database.windows.net,11020
+2025-08-28T03:52:09.445615545Z fail: Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware[1]
+2025-08-28T03:52:09.445621745Z       An unhandled exception has occurred while executing the request.
+2025-08-28T03:52:09.445627945Z       Microsoft.Data.SqlClient.SqlException (0x80131904): ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.445633845Z       See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.445653445Z        ---> Azure.Identity.AuthenticationFailedException: ManagedIdentityCredential authentication failed: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.445660545Z       See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/managedidentitycredential/troubleshoot
+2025-08-28T03:52:09.445667245Z        ---> MSAL.NetCore.4.73.1.0.MsalServiceException:
+2025-08-28T03:52:09.445674145Z       	ErrorCode: managed_identity_request_failed
+2025-08-28T03:52:09.445680945Z       Microsoft.Identity.Client.MsalServiceException: [Managed Identity] Error Message: Unable to load the proper Managed Identity. Managed Identity Correlation ID: 93bf48d1-c9bc-4328-b1c8-12e29b8f32ff Use this Correlation ID for further investigation.
+2025-08-28T03:52:09.445687645Z          at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.HandleResponseAsync(AcquireTokenForManagedIdentityParameters parameters, HttpResponse response, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445694445Z          at Microsoft.Identity.Client.ManagedIdentity.AbstractManagedIdentity.AuthenticateAsync(AcquireTokenForManagedIdentityParameters parameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445700945Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.SendTokenRequestForManagedIdentityAsync(ILoggerAdapter logger, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445707646Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.GetAccessTokenAsync(CancellationToken cancellationToken, ILoggerAdapter logger)
+2025-08-28T03:52:09.445714046Z          at Microsoft.Identity.Client.Internal.Requests.ManagedIdentityAuthRequest.ExecuteAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.445720846Z          at Microsoft.Identity.Client.Internal.Requests.RequestBase.<>c__DisplayClass11_1.<<RunAsync>b__1>d.MoveNext()
+2025-08-28T03:52:09.445727646Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.445734146Z          at Microsoft.Identity.Client.Utils.StopwatchService.MeasureCodeBlockAsync(Func`1 codeBlock)
+2025-08-28T03:52:09.445740746Z          at Microsoft.Identity.Client.Internal.Requests.RequestBase.RunAsync(CancellationToken cancellationToken)
+2025-08-28T03:52:09.445747846Z          at Microsoft.Identity.Client.ApiConfig.Executors.ManagedIdentityExecutor.ExecuteAsync(AcquireTokenCommonParameters commonParameters, AcquireTokenForManagedIdentityParameters managedIdentityParameters, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445754546Z          at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsyncCore(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445761446Z          at Azure.Identity.MsalManagedIdentityClient.AcquireTokenForManagedIdentityAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445767946Z          at Azure.Identity.ManagedIdentityClient.AuthenticateAsync(Boolean async, TokenRequestContext context, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445774046Z          at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.445780646Z       	StatusCode: 400 
+2025-08-28T03:52:09.445787046Z       	ResponseBody:  
+2025-08-28T03:52:09.445793246Z       	Headers: 
+2025-08-28T03:52:09.446059049Z          --- End of inner exception stack trace ---
+2025-08-28T03:52:09.446069849Z          at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.446084350Z          at Azure.Identity.ManagedIdentityCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.446111350Z          at Azure.Identity.ManagedIdentityCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.446132550Z          at Azure.Identity.DefaultAzureCredential.GetTokenFromSourcesAsync(TokenCredential[] sources, TokenRequestContext requestContext, Boolean async, CancellationToken cancellationToken)
+2025-08-28T03:52:09.446139950Z          at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.446146250Z          at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage, Boolean isCredentialUnavailable)
+2025-08-28T03:52:09.446152350Z          at Azure.Identity.DefaultAzureCredential.GetTokenImplAsync(Boolean async, TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.446158550Z          at Azure.Identity.DefaultAzureCredential.GetTokenAsync(TokenRequestContext requestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.446164850Z          at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.GetTokenAsync(TokenCredentialKey tokenCredentialKey, String secret, TokenRequestContext tokenRequestContext, CancellationToken cancellationToken)
+2025-08-28T03:52:09.446194551Z          at Microsoft.Data.SqlClient.ActiveDirectoryAuthenticationProvider.AcquireTokenAsync(SqlAuthenticationParameters parameters)
+2025-08-28T03:52:09.446201551Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.<>c__DisplayClass150_1.<<GetFedAuthToken>b__1>d.MoveNext()
+2025-08-28T03:52:09.446209151Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.446215351Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.446446053Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.GetFedAuthToken(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.446454753Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OnFedAuthInfo(SqlFedAuthInfo fedAuthInfo)
+2025-08-28T03:52:09.446461154Z          at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+2025-08-28T03:52:09.446467554Z          at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+2025-08-28T03:52:09.446474054Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.CompleteLogin(Boolean enlistOK)
+2025-08-28T03:52:09.446480654Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+2025-08-28T03:52:09.446488254Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+2025-08-28T03:52:09.446494954Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+2025-08-28T03:52:09.446555255Z          at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+2025-08-28T03:52:09.446562155Z          at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.446571355Z          at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.446577755Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.446645655Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+2025-08-28T03:52:09.446653656Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2025-08-28T03:52:09.446660556Z          at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 taskCompletionSource, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+2025-08-28T03:52:09.446666856Z          at Microsoft.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+2025-08-28T03:52:09.446716456Z          at Microsoft.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.446723856Z          at Microsoft.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+2025-08-28T03:52:09.446730456Z          at Microsoft.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry, SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.446736556Z          at Microsoft.Data.SqlClient.SqlConnection.Open(SqlConnectionOverrides overrides)
+2025-08-28T03:52:09.446742956Z          at Microsoft.Data.SqlClient.SqlConnection.Open()
+2025-08-28T03:52:09.446749357Z          at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerConnection.OpenDbConnection(Boolean errorsExpected)
+2025-08-28T03:52:09.446757357Z          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternal(Boolean errorsExpected)
+2025-08-28T03:52:09.446763457Z          at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.Open(Boolean errorsExpected)
+2025-08-28T03:52:09.446769757Z          at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+2025-08-28T03:52:09.446875958Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+2025-08-28T03:52:09.446893958Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+2025-08-28T03:52:09.446900658Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass28_0`2.<Execute>b__0(DbContext context, TState state)
+2025-08-28T03:52:09.446906958Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementation[TState,TResult](Func`3 operation, Func`3 verifySucceeded, TState state)
+2025-08-28T03:52:09.446977159Z          at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+2025-08-28T03:52:09.446985459Z          at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+2025-08-28T03:52:09.446991859Z          at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+2025-08-28T03:52:09.446998059Z          at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+2025-08-28T03:52:09.447004159Z          at ContosoUniversity.Controllers.CoursesController.Index() in /src/Controllers/CoursesController.cs:line 28
+2025-08-28T03:52:09.447010359Z          at lambda_method27(Closure, Object, Object[])
+2025-08-28T03:52:09.447016659Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.SyncActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+2025-08-28T03:52:09.447022759Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+2025-08-28T03:52:09.447028860Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-08-28T03:52:09.447035160Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+2025-08-28T03:52:09.447129561Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+2025-08-28T03:52:09.447137061Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+2025-08-28T03:52:09.447143061Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.447149461Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+2025-08-28T03:52:09.447155461Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+2025-08-28T03:52:09.447235562Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+2025-08-28T03:52:09.447246462Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+2025-08-28T03:52:09.447252462Z       --- End of stack trace from previous location ---
+2025-08-28T03:52:09.447258462Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+2025-08-28T03:52:09.447264462Z          at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+2025-08-28T03:52:09.447270362Z          at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+2025-08-28T03:52:09.447276262Z          at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)
+2025-08-28T03:52:09.447346763Z          at Microsoft.AspNetCore.Diagnostics.StatusCodePagesMiddleware.Invoke(HttpContext context)
+2025-08-28T03:52:09.447353463Z          at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+2025-08-28T03:52:09.447359663Z       ClientConnectionId:3d366c75-0211-4eed-9c04-0c42127f210f
+2025-08-28T03:52:09.447365663Z       ClientConnectionId before routing:1a41ad6b-a422-489f-861b-1f356aefcef5
+2025-08-28T03:52:09.447371763Z       Routing Destination:ad07db51c604.tr4465.westus3-a.worker.database.windows.net,11020
+2025-08-28T03:52:09.447441764Z warn: Microsoft.AspNetCore.HttpOverrides.ForwardedHeadersMiddleware[1]
+2025-08-28T03:52:09.447448664Z       Unknown proxy: [::ffff:100.100.0.154]:35306

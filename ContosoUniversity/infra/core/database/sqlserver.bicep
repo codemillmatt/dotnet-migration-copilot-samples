@@ -27,9 +27,10 @@ resource sqlServer 'Microsoft.Sql/servers@2023-02-01-preview' = {
       login: principalName
       sid: principalId
       tenantId: tenant().tenantId
-      azureADOnlyAuthentication: true
+      azureADOnlyAuthentication: false // Allow both Azure AD and SQL auth for flexibility
     }
     publicNetworkAccess: 'Enabled'
+    minimalTlsVersion: '1.2'
   }
 
   resource database 'databases@2023-02-01-preview' = {
@@ -58,4 +59,4 @@ resource sqlServer 'Microsoft.Sql/servers@2023-02-01-preview' = {
 
 output AZURE_SQL_SERVER string = sqlServer.name
 output AZURE_SQL_DATABASE string = databaseName
-output connectionString string = 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName};Database=${databaseName};Authentication=Active Directory Default;'
+output connectionString string = 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName};Database=${databaseName};Authentication=Active Directory Default;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
